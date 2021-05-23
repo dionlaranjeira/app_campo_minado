@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
-  View,
 } from 'react-native';
 import params from "./params";
+import Field from "./componentes/Field";
 
 export default class App extends Component {
   render(){
@@ -16,7 +13,7 @@ export default class App extends Component {
     <SafeAreaView  style={styles.container
     }  >
       <Text>Tamanho da grade: {params.getRowsAmount()} X {params.getColumnsAmount()}</Text>
-     
+      <Field></Field>
     </SafeAreaView>
   );
 }};

@@ -36,4 +36,57 @@ const createMinedBoar = (rows, columns, minesAmount) => {
     return board;
 }
 
-export {createMinedBoar}
+const cloneBoard = board => {
+    return board.map(rows => {
+        return rows.map(field => {
+            return {...field}
+        })
+    })
+}
+
+const getNeighbords = (board, row, column) => {
+    const neighbors = [];
+    const rows = [row -1, row, row +1];
+    const columns = [column -1, column, column +1];
+    rows.forEach(r => {
+        columns.forEach(c =>{
+            const different = r !== row || c !== column;
+            const validRow = r >= 0 && r < board.length; 
+            const validColumn = c >= 0 && c < board[0].length;
+
+            if(different && validColumn && validRow){
+                neighbors.push(board[r][c]);
+            }
+        })
+    })
+    return neighbors;
+}
+
+const safeNeighbords = (board, row, column) => {
+    const safes = (result, neighbord) => result && !neighbord.mined;
+    return getNeighbords(board, row, column).reduce(safes, true);
+}
+
+const openField = (board, row, column) => {
+    const field = board[row][column];
+    if (!field.opened){
+        field.opened = true;
+        if(field.mined){
+            field.exploded=true;
+        }else if (safeNeighbords(row, column)){
+            getNeighbords(board,row, column).forEach(n => openField(board, n.row, n.column));
+        }else{
+            const neighbord = getNeighbords(board,row, column);
+            field.nearMines = neighbord.filter(n => n.mined).length;    
+        }
+    }
+}
+
+const fields = board => [].concat(... board);
+const hadExploded = board => fields(board).filter(field => field.exploded).length > 0;
+const pending = field => (field.mined && !field.flagged) || (!field.opened && !field.mined);
+const wonGame = board => fields(board).filter(pending).length === 0;
+const showMines = board => fields(board).filter(field => field.mined).forEach(field => field.opened = true)
+
+
+export {createMinedBoar, cloneBoard, openField, hadExploded, wonGame, showMines}

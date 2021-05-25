@@ -3,41 +3,53 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  View,
 } from 'react-native';
 import params from "./params";
-import Field from "./componentes/Field";
-import Flag from "./componentes/Flag"
+import MineField from "./componentes/MineField";
+import {createMinedBoar} from "../src/functions";
+
 export default class App extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = this.createState();
+  }
+
+
+  minesAmount = () =>{
+    const rows = params.getRowsAmount();
+    const cols = params.getColumnsAmount();
+    return Math.ceil(cols * rows * params.difficultLevel);
+  }
+
+  createState = () =>{
+    const rows = params.getRowsAmount();
+    const cols = params.getColumnsAmount();
+    return {
+      board: createMinedBoar(rows,cols,this.minesAmount()),
+
+    }
+  }
+
   render(){
   return (
-    <SafeAreaView  style={styles.container
-    }  >
-      <Text>Tamanho da grade: {params.getRowsAmount()} X {params.getColumnsAmount()}</Text>
-      <Field/>
-      <Field opened />
-      <Field opened nearMines = {1} />
-      <Field opened nearMines = {2} />
-      <Field opened nearMines = {3} />
-      <Field opened nearMines = {4} />
-      <Field opened nearMines = {5} />
-      <Field opened nearMines = {6} />
-      <Field opened nearMines = {7} />
-      <Field mined />
-      <Field mined opened />
-      <Field mined opened exploded />
-      <Field flagged></Field>
-      <Field flagged opened></Field>
-      <Flag bigger ></Flag>
+    <SafeAreaView  style={styles.container}>
+     <View style={styles.board}>
+       <MineField board = {this.state.board} ></MineField>
+     </View>
     </SafeAreaView>
   );
 }};
 
 const styles = StyleSheet.create({
-  container: {
+  container:{
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+  },
+  board: {
     alignItems: 'center',
-    backgroundColor: '#F5FCFF'
+    backgroundColor: "#AAA",
   }
 });
 

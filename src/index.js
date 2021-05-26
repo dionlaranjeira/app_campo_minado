@@ -7,8 +7,9 @@ import {
   Alert,
 } from 'react-native';
 import params from "./params";
+import Header from "./componentes/Header";
 import MineField from "./componentes/MineField";
-import {invertFlag,createMinedBoar, cloneBoard, openField,hadExploded, showMines, wonGame} from "../src/functions";
+import {flagsUsed,invertFlag,createMinedBoar, cloneBoard, openField,hadExploded, showMines, wonGame} from "../src/functions";
 
 export default class App extends Component {
 
@@ -64,7 +65,12 @@ export default class App extends Component {
   render(){
   return (
     <SafeAreaView  style={styles.container}>
+     <Header flagsLeft = {this.minesAmount() - flagsUsed(this.state.board)}
+       onNewGame={()=>this.setState(this.createState())}
+       ></Header>
      <View style={styles.board}>
+       
+       
        <MineField board = {this.state.board}
        onOpenField= {this.onOpenField}
        onSelectField = {this.onSelectField}

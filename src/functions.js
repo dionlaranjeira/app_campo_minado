@@ -82,6 +82,11 @@ const openField = (board, row, column) => {
     }
 }
 
+const invertFlag = (board,row, column) => {
+    const field = board[row][column];
+    field.flagged = !field.flagged;
+}
+
 const fields = board => [].concat(... board);
 const hadExploded = board => fields(board).filter(field => field.exploded).length > 0;
 const pending = field => (field.mined && !field.flagged) || (!field.opened && !field.mined);
@@ -89,4 +94,10 @@ const wonGame = board => fields(board).filter(pending).length === 0;
 const showMines = board => fields(board).filter(field => field.mined).forEach(field => field.opened = true)
 
 
-export {createMinedBoar, cloneBoard, openField, hadExploded, wonGame, showMines}
+export {invertFlag,
+        createMinedBoar,
+        cloneBoard,
+        openField,
+        hadExploded,
+        wonGame,
+        showMines}

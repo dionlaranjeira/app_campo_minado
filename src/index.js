@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import params from "./params";
 import MineField from "./componentes/MineField";
-import {createMinedBoar, cloneBoard, openField,hadExploded, showMines, wonGame} from "../src/functions";
+import {invertFlag,createMinedBoar, cloneBoard, openField,hadExploded, showMines, wonGame} from "../src/functions";
 
 export default class App extends Component {
 
@@ -52,12 +52,23 @@ export default class App extends Component {
     this.setState({board, lost, won});  
 
   }
-
+  onSelectField = (row, column) => {
+    const board = cloneBoard(this.state.board);
+    invertFlag(board, row, column);
+    const won = wonGame(board);
+    if(won){
+      Alert.alert("VÍTORIA","Parabéns! Você ganhou!")
+    }
+    this.setState({board, won})
+  }
   render(){
   return (
     <SafeAreaView  style={styles.container}>
      <View style={styles.board}>
-       <MineField board = {this.state.board} onOpenField= {this.onOpenField}  ></MineField>
+       <MineField board = {this.state.board}
+       onOpenField= {this.onOpenField}
+       onSelectField = {this.onSelectField}
+         ></MineField>
      </View>
     </SafeAreaView>
   );

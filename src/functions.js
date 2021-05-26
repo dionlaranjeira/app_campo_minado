@@ -62,7 +62,7 @@ const getNeighbords = (board, row, column) => {
     return neighbors;
 }
 
-const safeNeighbords = (board, row, column) => {
+const safeNeighbordhood = (board, row, column) => {
     const safes = (result, neighbord) => result && !neighbord.mined;
     return getNeighbords(board, row, column).reduce(safes, true);
 }
@@ -73,7 +73,7 @@ const openField = (board, row, column) => {
         field.opened = true;
         if(field.mined){
             field.exploded=true;
-        }else if (safeNeighbords(row, column)){
+        }else if (safeNeighbordhood(board,row, column)){
             getNeighbords(board,row, column).forEach(n => openField(board, n.row, n.column));
         }else{
             const neighbord = getNeighbords(board,row, column);

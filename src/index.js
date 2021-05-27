@@ -9,6 +9,7 @@ import {
 import params from "./params";
 import Header from "./componentes/Header";
 import MineField from "./componentes/MineField";
+import LevelSelection from "./componentes/screens/LevelSelection"
 import {flagsUsed,invertFlag,createMinedBoar, cloneBoard, openField,hadExploded, showMines, wonGame} from "../src/functions";
 
 export default class App extends Component {
@@ -32,6 +33,7 @@ export default class App extends Component {
       board: createMinedBoar(rows,cols,this.minesAmount()),
       won: false, 
       lost: false,
+      showLevelSelection: false,
     }
   }
 
@@ -62,12 +64,23 @@ export default class App extends Component {
     }
     this.setState({board, won})
   }
+
+onLevelSelected = level =>{
+  params.difficultLevel = level;
+  this.setState(this.createState());
+}
+
   render(){
   return (
     <SafeAreaView  style={styles.container}>
      <Header flagsLeft = {this.minesAmount() - flagsUsed(this.state.board)}
        onNewGame={()=>this.setState(this.createState())}
+       onFlagPress={()=> this.setState({showLevelSelection:true})}
        ></Header>
+       <LevelSelection isVisible={this.state.showLevelSelection}
+       onLevelSelected={this.onLevelSelected}
+       onCancel={()=> this.setState({showLevelSelection:false})}
+       ></LevelSelection>
      <View style={styles.board}>
        
        
